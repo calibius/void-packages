@@ -1,0 +1,23 @@
+# Template file for 'llpp'
+pkgname=llpp
+version=33
+revision=1
+build_style=gnu-makefile
+hostmakedepends="pkg-config ocaml"
+makedepends="asciidoc freetype-devel jbig2dec-devel libjpeg-turbo-devel harfbuzz-devel mupdf-devel libopenjpeg2-devel gumbo-parser-devel libglvnd ocaml-lablgl-devel glu-devel"
+depends=" openjpeg2 libjpeg-turbo"
+short_desc="Graphical PDF viewer based on mupdf"
+maintainer="<calibius@gmail.com>"
+license="Public Domain"
+homepage="https://github.com/moosotc/llpp"
+distfiles="https://github.com/moosotc/llpp/archive/v${version}.tar.gz"
+checksum=b04932273a11058bd587285243f7d98201e5106107cc43699f4226b9d22a4967
+
+#uses makefile from archlinux/gentoo original by holomorph
+pre_build() {
+	cp "${FILESDIR}"/llpp-33-makefile ./Makefile
+	rm ./main.mli
+}
+do_build () {
+make
+}

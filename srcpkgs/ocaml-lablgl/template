@@ -1,0 +1,40 @@
+# Template file for 'ocaml-lablgl'
+pkgname=ocaml-lablgl
+version=1.06
+revision=1
+make_dirs="/usr/lib/ocaml/stublibs 0755 root root"
+wrksrc="lablgl-${version}"
+build_style=gnu-makefile
+make_install_args=""
+hostmakedepends="ocaml>=4.11.0 ocaml-findlib"
+makedepends="glu-devel libfreeglut-devel libglvnd-devel libXi-devel libXmu-devel tcl-devel tk-devel"
+short_desc="OCaml interface to OpenGL"
+maintainer="Calibius <calibius@gmail.com>"
+license="BSD"
+homepage="https:/github.com/garrigue/lablgl"
+distfiles="https://github.com/garrigue/lablgl/archive/v${version}.tar.gz"
+checksum=d11852cbdbd40a14a22b30a218d009033c810de461e5717582f5dbe480296a7a
+
+pre_build() {
+	printf "BINDIR = ${PKGDESTDIR}/usr/bin" > Makefile.config
+	printf 'RANLIB = :\n' >> Makefile.config
+	printf 'GLLIBS = -lGL -lGLU\n' >> Makefile.config
+	printf 'GLUTLIBS = -lglut\n' >> Makefile.config
+}
+
+do_build() {
+	make lib
+	make libopt
+}
+do_install() {
+	make install BINDIR='${PKGDESTDIR}/usr/bin' \
+	LIBDIR='${PKGDESTDIR}/usr/lib/ocaml' \
+	DDLDIR='${PKGDESTDIR}/usr/lib/ocaml/stublibs' \
+	INSTALLDIR='${PKGDESTDIR}/usr/lib/ocaml/lablGL'
+
+}
+post_install() {
+	vlicense COPYRIGHT
+	vinstall src/lablgl.cmxa 644 /usr/lib/ocaml/lablgl.cmxa
+	#vmove /usr/
+}
